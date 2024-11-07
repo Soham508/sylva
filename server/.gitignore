@@ -1,0 +1,30 @@
+# Node.js
+node_modules/
+
+# TypeScript build output
+dist/
+build/
+
+# TypeScript source maps (if you're generating them)
+*.js.map
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variable files
+.env
+
+# IDE / Editor directories and files
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Miscellaneous
+*.bak
+*.tmp
+*.swp

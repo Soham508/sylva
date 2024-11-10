@@ -55,7 +55,7 @@ const Navbar = () => {
                             <span className="z-10">About us</span>
                         </Link>
                         {currentUser && <Link to='dashboard' className="relative hover:shadow-slate-100/30 flex w-24 cursor-pointer items-center justify-center  text-black  font-semibold rounded-lg overflow-hidden hover-effect">
-                            <span className="z-10">Dashboard</span>
+                            <span className="z-10">Portfolio</span>
                         </Link>}
                     </div>
 

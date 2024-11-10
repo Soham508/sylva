@@ -13,152 +13,246 @@ const Assessment = () => {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
 
-    interface RiskState {
-        [key: number]: {
-            value: string;
-        };
+    type RiskOption = {
+        value: string;
+        score: number;
+    };
+
+    type RiskState = {
+        [key: number]: RiskOption;
+        tickers: string[]
+    };
+
+    type Option = {
+        label: string;
+        score: number;
+    };
+
+    type Question = {
+        question: string;
+        options: Option[];
+    };
+
+    type Sheet = Question[];
+    interface tickerOptions {
+        label: string;
+        ticker: string;
     }
 
     const [riskState, setRiskState] = useState<RiskState>({
-        0: { value: "a) 0%" }, // Example for question 1
-        1: { value: "a) Not likely at all" }, // Example for question 2
-        2: { value: "b) Sell some and hold some" }, // Example for question 3
-        3: { value: "d) Achieve significant growth" }, // Example for question 4
-        4: { value: "b) 1-3 years" }, // Example for question 5
-        5: { value: "a) Guaranteed 4% return" }, // Example for question 6
-        6: { value: "c) Hold it and see what happens" }, // Example for question 7
-        7: { value: "d) Individual stocks" }, // Example for question 8
-        8: { value: "b) Low (1-5%)" }, // Example for question 9
-        9: { value: "a) Never" } // Example for question 10
+        0: { value: "''", score: -1 },
+        1: { value: "''", score: -1 },
+        2: { value: "''", score: -1 },
+        3: { value: "''", score: -1 },
+        4: { value: "''", score: -1 },
+        5: { value: "''", score: -1 },
+        6: { value: "''", score: -1 },
+        7: { value: "''", score: -1 },
+        8: { value: "''", score: -1 },
+        9: { value: "''", score: -1 },
+        10: { value: "''", score: -1 },
+        11: { value: "''", score: -1 },
+        12: { value: "''", score: -1 },
+        13: { value: "''", score: -1 },
+        14: { value: "''", score: -1 },
+        tickers: [
+            "SUNPHARMA.NS",
+            "DRREDDY.NS",
+            "CIPLA.NS",
+            "ABBOTINDIA.NS",
+            "ZYDUSLIFE.NS",
+            "JBCHEPHARM.NS",
+            "POLYMED.NS",
+            "RELIANCE.NS",
+            "NTPC.NS",
+            "COALINDIA.NS",
+            "ADANIPOWER.NS",
+            "BPCL.NS",
+            "GSPL.NS",
+            "UNOMINDA.NS",
+            "ITC.NS",
+            "MARICO.NS",
+            "BRITANNIA.NS",
+            "COLPAL.NS",
+            "VBL.NS",
+            "BALRAMCHIN.NS",
+            "NAVNETEDUL.NS"
+        ]
     });
 
+    const tickers: { question: string; options: tickerOptions[] } = {
+        "question": "Q.16 Which of the following stocks would you prefer not to include in your portfolio? (Select all that apply)",
+        "options": [
+            { label: "Sun Pharmaceutical Industries", ticker: "SUNPHARMA.NS" },
+            { label: "Dr Reddy's Laboratories", ticker: "DRREDDY.NS" },
+            { label: "Cipla", ticker: "CIPLA.NS" },
+            { label: "Abbott India Ltd", ticker: "ABBOTINDIA.NS" },
+            { label: "Zydus Lifesciences Ltd", ticker: "ZYDUSLIFE.NS" },
+            { label: "JB Chemicals & Pharmaceuticals", ticker: "JBCHEPHARM.NS" },
+            { label: "Poly Medicure Ltd", ticker: "POLYMED.NS" },
+            { label: "Reliance Industries Limited", ticker: "RELIANCE.NS" },
+            { label: "National Thermal Power Corporation Ltd", ticker: "NTPC.NS" },
+            { label: "Coal India Ltd", ticker: "COALINDIA.NS" },
+            { label: "Adani Power", ticker: "ADANIPOWER.NS" },
+            { label: "Bharat Petroleum Corporation Ltd", ticker: "BPCL.NS" },
+            { label: "Gujarat State Petronet Ltd", ticker: "GSPL.NS" },
+            { label: "Uno Minda Ltd", ticker: "UNOMINDA.NS" },
+            { label: "ITC Limited", ticker: "ITC.NS" },
+            { label: "Marico Ltd", ticker: "MARICO.NS" },
+            { label: "Britannia Ltd", ticker: "BRITANNIA.NS" },
+            { label: "Colgate-Palmolive (India) Ltd", ticker: "COLPAL.NS" },
+            { label: "Varun Beverages", ticker: "VBL.NS" },
+            { label: "Balrampur Chini Mills Limited", ticker: "BALRAMCHIN.NS" },
+            { label: "Navneet Education Ltd", ticker: "NAVNETEDUL.NS" }
+        ]
 
-    const sheet = [
+    }
+
+    const sheet: Sheet = [
         {
-            "question": "1. What percentage of your portfolio would you allocate to high-risk investments (e.g., stocks, crypto)?",
+            "question": "Q.1 Which of the following best describes your current stage of life?",
             "options": [
-                "a) 0%",
-                "b) 10%",
-                "c) 30%",
-                "d) 50%",
-                "e) 70%+"
+                { label: "You have zero financial burden and are in your earliest stage of investing.", score: 5 },
+                { label: "You have high financial responsibility and are building wealth.", score: 3 },
+                { label: "You have accumulated wealth and stable income but are still investing for future goals.", score: 7 },
+                { label: "You are retired/close to retirement with accumulated wealth and little/no financial burden.", score: 9 }
             ]
         },
         {
-            "question": "2. Imagine you invested $10,000 and in one year the value of your investment could either grow to $15,000 or drop to $7,000. How likely are you to make the investment?",
+            "question": "Q.2 How would you describe your current income stability and career stage?",
             "options": [
-                "a) Not likely at all",
-                "b) Somewhat unlikely",
-                "c) Neutral",
-                "d) Somewhat likely",
-                "e) Very likely"
+                { label: "Just starting in my career, with fluctuating income.", score: 3 },
+                { label: "Established in my career with a steady income.", score: 5 },
+                { label: "I am approaching a peak in my career, with high income and stability.", score: 9 },
+                { label: "Nearing retirement, focusing on maintaining my income.", score: 7 },
+                { label: "No income stream, have some deposits.", score: 1 }
             ]
         },
         {
-            "question": "3. How would you react to a 20% decline in the value of your investment portfolio in one month?",
+            "question": "Q.3 What percentage of your wealth & income is your invested portfolio value?",
             "options": [
-                "a) Sell everything",
-                "b) Sell some and hold some",
-                "c) Hold without action",
-                "d) Buy more of the declining asset",
-                "e) Buy more aggressively"
+                { label: "Slider - Wealth %", score: 0 },
+                { label: "Slider - Income %", score: 0 }
             ]
         },
         {
-            "question": "4. What is your primary investment goal?",
+            "question": "Q.4 You have to support financially:",
             "options": [
-                "a) Preserve capital",
-                "b) Generate moderate income",
-                "c) Generate moderate growth",
-                "d) Achieve significant growth",
-                "e) Maximize potential returns, regardless of risk"
+                { label: "Only myself", score: 9 },
+                { label: "Two people including myself", score: 7 },
+                { label: "2 - 4 people other than myself", score: 5 },
+                { label: "More than four people other than myself", score: 3 }
             ]
         },
         {
-            "question": "5. How long are you willing to wait for a return on your investment?",
+            "question": "Q.5 Which of these objectives is the most important to you from an investment perspective?",
             "options": [
-                "a) Less than 1 year",
-                "b) 1-3 years",
-                "c) 3-5 years",
-                "d) 5-10 years",
-                "e) 10+ years"
+                { label: "Preserving wealth", score: 2 },
+                { label: "Generating regular income to meet current requirements", score: 4 },
+                { label: "Balance current income and long-term growth", score: 6 },
+                { label: "Long-term growth", score: 8 }
             ]
         },
         {
-            "question": "6. You are presented with two investment opportunities: one with a guaranteed 4% return and another with a potential 20% return (but with a risk of losing 10%). Which one would you choose?",
+            "question": "Q.6 If your current source of income were to stop today, how long would your present savings support you? (optional/conditional)",
             "options": [
-                "a) Guaranteed 4% return",
-                "b) 90% in the guaranteed, 10% in the risky investment",
-                "c) 70% in the guaranteed, 30% in the risky investment",
-                "d) 50% in both",
-                "e) 100% in the risky investment"
+                { label: "Less than 3 months", score: 2 },
+                { label: "3 - 6 months", score: 4 },
+                { label: "6 months to a year", score: 6 },
+                { label: "More than 1 year", score: 8 }
             ]
         },
         {
-            "question": "7. If your investment doubles in value, how would you react?",
+            "question": "Q.7 How is your health and insurance status?",
             "options": [
-                "a) Sell immediately to lock in the gain",
-                "b) Sell a portion and hold the rest",
-                "c) Hold it and see what happens",
-                "d) Reinvest more into the same investment",
-                "e) Look for even riskier opportunities"
+                { label: "Healthy and have insurance", score: 9 },
+                { label: "Healthy and do not have insurance", score: 6 },
+                { label: "Not healthy and do not have insurance", score: 2 },
+                { label: "Not healthy and have insurance", score: 7 }
             ]
         },
         {
-            "question": "8. If you had $1,000 to invest, where would you put it?",
+            "question": "Q.9 At the beginning of the year, you invest Rs.1,00,000 for the long term. At the end of year one, there are four possible outcomes (best and worst-case scenarios). Which option would you be prepared to accept?",
             "options": [
-                "a) Savings account",
-                "b) Government bonds",
-                "c) Diversified mutual fund",
-                "d) Individual stocks",
-                "e) Cryptocurrencies or high-growth startups"
+                { label: "Portfolio A: Rs. 1,00,000", score: 3 },
+                { label: "Portfolio B: Rs. 90,000 - Rs. 1,10,000", score: 5 },
+                { label: "Portfolio C: Rs. 80,000 - Rs. 1,20,000", score: 7 },
+                { label: "Portfolio D: Rs. 70,000 - Rs. 1,30,000", score: 9 }
             ]
         },
         {
-            "question": "9. What kind of volatility are you comfortable with in your investments?",
+            "question": "Q.10 How comfortable are you taking financial risks to help ensure you achieve your longer-term needs and objectives?",
             "options": [
-                "a) None (0%)",
-                "b) Low (1-5%)",
-                "c) Moderate (5-10%)",
-                "d) High (10-20%)",
-                "e) Very high (20%+)"
+                { label: "Not at all comfortable", score: 3 },
+                { label: "Slightly comfortable", score: 5 },
+                { label: "Comfortable", score: 7 },
+                { label: "Very comfortable", score: 9 }
             ]
         },
         {
-            "question": "10. How do you feel about leveraging (borrowing money to invest)?",
+            "question": "Q.11 Which of the following best describes your understanding about the market?",
             "options": [
-                "a) Never",
-                "b) Rarely",
-                "c) Occasionally",
-                "d) Often",
-                "e) Always"
+                { label: "An experienced investor, constantly keeps up to date with the stock market. Have exposure to various types of stocks and fully aware of the risks involved to gain high returns", score: 9 },
+                { label: "Awareness of the stock market is limited to information passed on by brokers or financial planners. Rely on professionals to keep me updated", score: 6 },
+                { label: "Little awareness of the stock market. However, want to build my knowledge and understanding", score: 2 }
+            ]
+        },
+        {
+            "question": "Q.12 Which of the following suits best to you as a risk taker?",
+            "options": [
+                { label: "Comfortable to take high risk for higher returns", score: 8 },
+                { label: "Comfortable in taking calculated risk", score: 5 },
+                { label: "Low risk taking capacity", score: 2 },
+                { label: "Extremely averse to risk", score: 0 }
+            ]
+        },
+        {
+            "question": "Q.13 How long are you looking at investing your capital before accessing it? (Assuming you already have a plan to meet short-term cash flow or emergencies.)",
+            "options": [
+                { label: "In 2 years or less", score: 5 },
+                { label: "Within 3 - 5 years", score: 6 },
+                { label: "Within 6 - 10 years", score: 7 },
+                { label: "Not for 10+ years", score: 8 }
+            ]
+        },
+        {
+            "question": "Q.14 If your investments increased 12% (a to b) in year one, then 18% (b to c) in year two, what are you most likely to do in year three?",
+            "options": [
+                { label: "You would buy more with those capital gains.", score: 8 },
+                { label: "You would hold your portfolio.", score: 6 },
+                { label: "You would sell your stocks at a profit and take an exit position.", score: 4 }
+            ]
+        },
+        {
+            "question": "Q.15 When you think of the word 'risk,' which of the following words comes to mind first?",
+            "options": [
+                { label: "Loss", score: 1 },
+                { label: "Uncertainty", score: 3 },
+                { label: "Opportunity", score: 7 },
+                { label: "Thrill", score: 9 }
             ]
         }
     ];
 
 
-    useEffect(() => {
-        if (!currentUser) {
-            navigate('/login');
-        }
 
+    // Effect to fetch user data
+    useEffect(() => {
         const getUser = async () => {
             try {
-                const email = currentUser?.email
+                const email = currentUser?.email;
                 const registerResponse = await axios.post('http://localhost:3000/api/v1/user', { email });
-                console.log(registerResponse.data)
                 if (registerResponse.data.user.A) {
                     navigate('/risk-profile');
                 }
                 setLoading(false);
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
-        }
+        };
 
         getUser();
-
-    })
+    }, [currentUser, navigate]);
 
     return (
         <>
@@ -167,159 +261,94 @@ const Assessment = () => {
                     <Spinner className="h-16 w-16 mt-36" />
                 </div>)}
             {!loading && (
-
                 <div className="w-full flex flex-col items-center gap-y-12">
                     <h1 className="text-black text-[30px] font-serif "> Please fill the form for your risk assessment</h1>
 
-                    <div className="w-full flex flex-row gap-y-12 p-8 rounded-lg bg-black">
-
-                        {sheet.map((q, index1) =>
-                        (
-                            <div className={`w-full ${(page == 1 && index1 + 1 <= 2) ? '' : 'hidden'} flex flex-col justify-center items-start gap-y-4`}>
-                                <h2 className="text-xl text-white mb-10">{q.question}</h2>
-                                {q.options.map((option) => (
-                                    <div className={`w-3/4 flex flex-row cursor-pointer hover:bg-slate-100 font-bold items-center gap-x-4 ${riskState[index1].value == option ? 'bg-white' : 'bg-black group'} pl-6 rounded-xl p-4`}
-                                        onClick={() => {
-                                            setRiskState((prev) => ({
-                                                ...prev,
-                                                [index1]: { value: option }
-                                            }));
-                                        }}
-                                    >
-                                        <div className={`h-6 w-6 flex rounded-full items-center justify-center ${riskState[index1].value == option ? 'bg-black group-hover:bg-slate-100' : 'bg-slate-100 group-hover:bg-black'}`}>
-                                            <div className={`h-3 w-3 rounded-full ${riskState[index1].value == option ? 'bg-slate-100 group-hover:bg-black' : 'bg-black group-hover:bg-slate-100'} `} />
+                    <div className={`w-2/3 h-[550px] flex flex-col ${page > 14 ? 'hidden' : ''} gap-y-12 p-8 rounded-lg bg-black}`}>
+                        <div className="w-full flex flex-row overflow-x-auto">
+                            {sheet.map((q, index1) => (
+                                <div key={index1} className={`w-full flex flex-col ${(index1 == (page - 1)) ? '' : 'hidden'} justify-center items-start gap-y-4`}>
+                                    <h2 className="text-xl text-white mb-10">{q.question}</h2>
+                                    {q.options.map((option, optionIndex) => (
+                                        <div
+                                            key={optionIndex}
+                                            className={`w-3/4 flex flex-row cursor-pointer hover:bg-slate-100 font-bold items-center gap-x-4 ${riskState[index1]?.value === option.label ? 'bg-white' : 'bg-black group'} pl-6 rounded-xl p-4`}
+                                            onClick={() => {
+                                                setRiskState((prev) => ({
+                                                    ...prev,
+                                                    [index1]: { value: option.label, score: option.score }
+                                                }));
+                                            }}
+                                        >
+                                            <div className={`h-6 w-6 flex rounded-full items-center justify-center ${riskState[index1]?.value === option.label ? 'bg-black group-hover:bg-slate-100' : 'bg-slate-100 group-hover:bg-black'}`}>
+                                                <div className={`h-3 w-3 rounded-full ${riskState[index1]?.value === option.label ? 'bg-slate-100 group-hover:bg-black' : 'bg-black group-hover:bg-slate-100'}`} />
+                                            </div>
+                                            <div className={`text-lg font-normal w-full ${riskState[index1]?.value === option.label ? 'text-black group-hover:text-white' : 'text-white group-hover:text-black'}`}>
+                                                {option.label}
+                                            </div>
                                         </div>
-                                        <div className={`text-lg w-full ${riskState[index1].value == option ? 'text-black group-hover:text-white' : 'text-white group-hover:text-black'}`}> {option}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
+                                    ))}
+                                </div>
+                            ))}
 
-                        {sheet.map((q, index1) =>
-                        (
-                            <div className={`w-full ${(page == 2 && index1 + 1 <= 4 && index1 + 1 > 2) ? '' : 'hidden'} flex flex-col justify-center items-start gap-y-4`}>
-                                <h2 className="text-xl text-white">{q.question}</h2>
-                                {q.options.map((option) => (
-                                    <div className={`w-3/4 flex flex-row cursor-pointer hover:bg-slate-100 font-bold items-center gap-x-4 ${riskState[index1].value == option ? 'bg-white' : 'bg-black group'} pl-6 rounded-xl p-4`}
-                                        onClick={() => {
-                                            setRiskState((prev) => ({
-                                                ...prev,
-                                                [index1]: { value: option }
-                                            }));
-                                        }}
-                                    >
-                                        <div className={`h-6 w-6 flex rounded-full items-center justify-center ${riskState[index1].value == option ? 'bg-black group-hover:bg-white' : 'bg-white group-hover:bg-black'}`}>
-                                            <div className={`h-3 w-3 rounded-full ${riskState[index1].value == option ? 'bg-white group-hover:bg-black' : 'bg-black group-hover:bg-white'} `} />
-                                        </div>
-                                        <div className={`text-lg w-full ${riskState[index1].value == option ? 'text-black group-hover:text-white' : 'text-white group-hover:text-black'}`}> {option}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-
-                        {sheet.map((q, index1) =>
-                        (
-                            <div className={`w-full ${(page == 3 && index1 + 1 <= 6 && index1 + 1 > 4) ? '' : 'hidden'} flex flex-col justify-center items-start gap-y-4`}>
-                                <h2 className="text-xl text-white">{q.question}</h2>
-                                {q.options.map((option) => (
-                                    <div className={`w-3/4 flex flex-row cursor-pointer hover:bg-slate-100 font-bold items-center gap-x-4 ${riskState[index1].value == option ? 'bg-white' : 'bg-black group'} pl-6 rounded-xl p-4`}
-                                        onClick={() => {
-                                            setRiskState((prev) => ({
-                                                ...prev,
-                                                [index1]: { value: option }
-                                            }));
-                                        }}
-                                    >
-                                        <div className={`h-6 w-6 flex rounded-full items-center justify-center ${riskState[index1].value == option ? 'bg-black group-hover:bg-white' : 'bg-white group-hover:bg-black'}`}>
-                                            <div className={`h-3 w-3 rounded-full ${riskState[index1].value == option ? 'bg-white group-hover:bg-black' : 'bg-black group-hover:bg-white'} `} />
-                                        </div>
-                                        <div className={`text-lg w-full ${riskState[index1].value == option ? 'text-black group-hover:text-white' : 'text-white group-hover:text-black'}`}> {option}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-
-                        {sheet.map((q, index1) =>
-                        (
-                            <div className={`w-full ${(page == 4 && index1 + 1 <= 8 && index1 + 1 > 6) ? '' : 'hidden'} flex flex-col justify-center items-start gap-y-4`}>
-                                <h2 className="text-xl text-white">{q.question}</h2>
-                                {q.options.map((option) => (
-                                    <div className={`w-3/4 flex flex-row cursor-pointer hover:bg-slate-100 font-bold items-center gap-x-4 ${riskState[index1].value == option ? 'bg-white' : 'bg-black group'} pl-6 rounded-xl p-4`}
-                                        onClick={() => {
-                                            setRiskState((prev) => ({
-                                                ...prev,
-                                                [index1]: { value: option }
-                                            }));
-                                        }}
-                                    >
-                                        <div className={`h-6 w-6 flex rounded-full items-center justify-center ${riskState[index1].value == option ? 'bg-black group-hover:bg-white' : 'bg-white group-hover:bg-black'}`}>
-                                            <div className={`h-3 w-3 rounded-full ${riskState[index1].value == option ? 'bg-white group-hover:bg-black' : 'bg-black group-hover:bg-white'} `} />
-                                        </div>
-                                        <div className={`text-lg w-full ${riskState[index1].value == option ? 'text-black group-hover:text-white' : 'text-white group-hover:text-black'}`}> {option}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-
-                        {sheet.map((q, index1) =>
-                        (
-                            <div className={`w-full ${(page == 5 && index1 + 1 <= 10 && index1 + 1 > 8) ? '' : 'hidden'} flex flex-col justify-center items-start gap-y-4`}>
-                                <h2 className="text-xl text-white">{q.question}</h2>
-                                {q.options.map((option) => (
-                                    <div className={`w-3/4 flex flex-row cursor-pointer hover:bg-slate-100 font-bold items-center gap-x-4 ${riskState[index1].value == option ? 'bg-white' : 'bg-black group'} pl-6 rounded-xl p-4`}
-                                        onClick={() => {
-                                            setRiskState((prev) => ({
-                                                ...prev,
-                                                [index1]: { value: option }
-                                            }));
-                                        }}
-                                    >
-                                        <div className={`h-6 w-6 flex rounded-full items-center justify-center ${riskState[index1].value == option ? 'bg-black group-hover:bg-white' : 'bg-white group-hover:bg-black'}`}>
-                                            <div className={`h-3 w-3 rounded-full ${riskState[index1].value == option ? 'bg-white group-hover:bg-black' : 'bg-black group-hover:bg-white'} `} />
-                                        </div>
-                                        <div className={`text-lg w-full ${riskState[index1].value == option ? 'text-black group-hover:text-white' : 'text-white group-hover:text-black'}`}> {option}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
+                        </div>
 
                     </div>
-                    <div className="w-full absolute bottom-10 flex flex-row items-center justify-center gap-x-32">
-                        {
-                            (page > 1) &&
-                            <div className="relative hover:bg-slate-200 gap-x-2 flex h-12 w-24 cursor-pointer items-center justify-center  text-black  font-semibold rounded-lg overflow-hidden hover-effect"
-                                onClick={() => { setPage((prev) => (prev - 1)) }}
-                            >
-                                <HiOutlineArrowSmLeft size={28} />
-                                <span className="z-10">Back</span>
-                            </div>
-                        }
-                        {
-                            (page < 5) &&
-                            <div className="relative hover:bg-slate-200 flex gap-x-2 h-12 w-24 cursor-pointer items-center justify-center  text-black  font-semibold rounded-lg overflow-hidden hover-effect"
-                                onClick={() => { setPage((prev) => (prev + 1)) }}
-                            >
-                                <span className="z-10">Next</span>
-                                <HiOutlineArrowSmRight size={28} />
-                            </div>
-                        }
 
-                        {(page == 5) &&
-                            <div className="relative flex flex-row bg-black p-3 gap-x-2 items-center text-white rounded-lg shadow-md hover:bg-black/90 active:bg-black/80 shadow-black cursor-pointer"
+                    {page == 15 && (
+                        <div className="w-full flex flex-col items-center justify-center">
+                            <h2 className="text-xl text-black "> {tickers.question}</h2>
+                            <div className="grid grid-cols-3  items-center gap-4 w-full max-w-4xl mt-16">
+                                {tickers.options.map((option, index) => (
+                                    <div key={index} className="text-md p-3 hover-effect hover:bg-slate-300 cursor-pointer rounded-lg bg-slate-200 text-center text-black">
+                                        {option.label}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )
 
+                    }
+                    <div className="w-full mb-10 absolute bottom-0 flex flex-row items-center justify-center gap-x-32">
+                        {page > 1 && (
+                            <div className="relative hover:bg-slate-200 gap-x-2 flex h-12 w-24 cursor-pointer items-center justify-center
+                             text-black font-semibold rounded-lg overflow-hidden hover-effect"
+                                onClick={() => { setPage((prev) => prev - 1) }}
                             >
+                                <HiOutlineArrowSmLeft size={20} className="ml-1 top-1" />
+                                <span>  Back </span>
+                            </div>
+                        )}
+                        {page < 15 && (
+                            <>
+                                <div className="relative hover:bg-slate-200 flex flex-row h-12 w-24 cursor-pointer items-center justify-center text-black font-semibold rounded-lg overflow-hidden hover-effect"
+                                    onClick={() => {
+                                        //if (riskState[page - 1].score == -1) {
+                                        //    window.alert("Please select one of the options")
+                                        //    return
+                                        //}
+                                        setPage((prev) => prev + 1)
+                                    }}
+                                >
+                                    <span>Next</span>
+                                    <HiOutlineArrowSmRight size={20} className="ml-1 top-1" />
+                                </div>
+                            </>
+
+                        )}
+                        {page === 15 && (
+                            <div className="relative flex flex-row bg-black p-3 gap-x-2 items-center text-white rounded-lg shadow-md hover:bg-black/90 active:bg-black/80 shadow-black cursor-pointer">
                                 <span className="z-10 top-3">Submit</span>
                                 <IoMdSend size={20} />
                             </div>
-                        }
+                        )}
+
 
                     </div>
-                </div >
-
-            )
-            }
+                </div>
+            )}
         </>
-    )
-}
+    );
+};
 
-export default Assessment
+export default Assessment;

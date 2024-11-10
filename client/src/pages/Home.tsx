@@ -73,7 +73,9 @@ const Home = () => {
             <footer title="useScroll" className='flex flex-row justify-between items-center p-6 h-20 mt-10 mr-6 ml-6 border-t-2 border-black'>
                 <Footer.Copyright href="#" by="SYLVA™" year={2024} />
                 <div className='flex flex-row gap-x-10'>
-                    <Link to="#" className='border-b-2 hover:border-black hover-effect'>About</Link>
+                    <Link to='/' className="relative hover:shadow-slate-100/30 flex w-16  cursor-pointer items-center justify-center  text-black rounded-lg overflow-hidden hover-effect">
+                        <span className="z-10">About</span>
+                    </Link>
                     <Link to="#" className='border-b-2 hover:border-black hover-effect'>Privacy Policy</Link>
                     <Link to="#" className='border-b-2 hover:border-black hover-effect'>Licensing</Link>
                     <Link to="#" className='border-b-2 hover:border-black hover-effect'>Contact</Link>

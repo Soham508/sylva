@@ -1,3 +1,4 @@
+import StockCharts from '@/components/StockCharts';
 import { useEffect, useState } from 'react';
 
 
@@ -21,8 +22,16 @@ const Energy = () => {
 
 
     return (
-        <div className="flex flex-col gap-y-12 h-56 w-full">
+        <div className="flex flex-col gap-y-12 w-full">
             <h1 className="text-3xl font-serif font-semibold m-4"> Energy Sector </h1>
+            <div className='w-full flex flex-row'>
+                <div className='w-1/2 flex items-center justify-center'>
+
+                </div>
+                <div className='w-1/2 flex items-center justify-end'>
+                    <StockCharts />
+                </div>
+            </div>
             <pre>{data ? data['Meta Data']['1. Information'] : ''}</pre>
         </div>
     )

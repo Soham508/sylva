@@ -14,6 +14,8 @@ import Layout from './Layout';
 import { AuthProvider } from './context/AuthContext';
 import Assessment from './pages/Assessment';
 import Energy from './pages/sectorss/Energy';
+import FMCG from './pages/sectorss/FMCG';
+import Healthcare from './pages/sectorss/Healthcare';
 
 
 
@@ -30,8 +32,8 @@ function App() {
             <Route path="research" element={<Research />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="dashboard/energy" element={<Energy />} />
-            <Route path="dashboard/fmcg" element={<Energy />} />
-            <Route path="dashboard/healthcare" element={<Energy />} />
+            <Route path="dashboard/fmcg" element={<FMCG />} />
+            <Route path="dashboard/healthcare" element={<Healthcare />} />
             <Route path="risk-profile" element={<RiskProfile />} />
             <Route path="portfolio" element={<Portfolio />} />
             <Route path="settings" element={<Settings />} />

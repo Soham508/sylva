@@ -9,6 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 const User = () => {
     const [openModal, setOpenModal] = useState(false);
     const { currentUser, logout } = useAuth();
+    const photoURL = currentUser?.photoURL
 
     const handleLogOut = async () => {
         try {
@@ -24,8 +25,7 @@ const User = () => {
                 arrowIcon={false}
                 inline
                 className="bg-black border p-2  border-slate-900 rounded-lg"
-                label={
-                    <Avatar alt="User" img={currentUser?.photoURL ? currentUser.photoURL : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtRs_rWILOMx5-v3aXwJu7LWUhnPceiKvvDg&s"} rounded />
+                label={<Avatar alt="User" img={photoURL ? photoURL : 'https://i.pinimg.com/474x/76/4d/59/764d59d32f61f0f91dec8c442ab052c5.jpg'} rounded />
                 }
             >
                 <Dropdown.Header className="text-white">

@@ -37,7 +37,6 @@ const Login = () => {
                     <div className="flex flex-col gap-y-8 w-full items-center border-b-[1px] border-black pb-10">
                         <div className="flex w-full items-center flex-row gap-x-2 p-1 border-black border-b-2">
                             <MdEmail size={28} />
-
                             <input type="email" placeholder="Enter your email" className="w-full p-4 rounded-lg text-xl hover:bg-slate-200/90 border-0 font-serif bg-slate-100 text-black  border-black  focus:border-0  placeholder:text-black focus:outline-none focus:ring-0 placeholder-black " />
                         </div>
                         <div className="flex w-full items-center flex-row gap-x-2 p-1 border-b-2 border-black ">

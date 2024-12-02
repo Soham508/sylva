@@ -34,8 +34,8 @@ const Home = () => {
                     whileInView={'show'}
                     viewport={{ once: true, amount: 0.2 }}
                 >
-                    <h1 className="font-semibold font-serif bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-slate-900 to-slate-950 bg-clip-text text-transparent text-[70px] mr-16">Rooted in Strategy</h1>
-                    <h1 className="font-semibold font-serif bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-slate-900 to-slate-950 bg-clip-text text-transparent text-[70px] ml-28">Growing with Vision</h1>
+                    <h1 className="font-semibold font-serif bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-slate-900 to-slate-950 bg-clip-text text-transparent text-[60px] mr-16">Rooted in Strategy</h1>
+                    <h1 className="font-semibold font-serif bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-slate-900 to-slate-950 bg-clip-text text-transparent text-[65px] ml-28">Growing with Vision</h1>
                 </motion.div>
             </div>
             <div className="flex flex-col gap-y-28">
@@ -53,19 +53,7 @@ const Home = () => {
                     </h2>
                 </motion.div>
 
-                <motion.div
-                    className="m-6 h-[40rem] flex items-center justify-center rounded-lg  bg-black"
-                    variants={fadeIn("up", 0.05)}
-                    initial='hidden'
-                    whileInView={'show'}
-                    viewport={{ once: true, amount: 0.2 }}
-                >
-                    <h2 className="text-[35px] w-2/3 text-white font-serif">
-                        At Sylva, we specialize in crafting innovative equity solutions that empower our clients to achieve sustainable financial growth.
-                        Through expertly curated portfolios and strategic market insights, we navigate complex markets with precision, helping investors maximize returns and build long-term wealth.
-                        Our forward-thinking approach ensures that today's investments create a secure and prosperous future, tailored to the unique goals of each client.
-                    </h2>
-                </motion.div>
+
 
 
             </div>

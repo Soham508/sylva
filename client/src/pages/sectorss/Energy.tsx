@@ -2,6 +2,7 @@ import StockCharts from '@/components/StockCharts';
 import { useEffect, useState } from 'react';
 
 
+
 const Energy = () => {
     const [data, setData] = useState(null);
 
@@ -26,13 +27,16 @@ const Energy = () => {
             <h1 className="text-3xl font-serif font-semibold m-4"> Energy Sector </h1>
             <div className='w-full flex flex-row'>
                 <div className='w-1/2 flex items-center justify-center'>
-
+                    <h2 className="text-xl w-full font-semibold text-black font-serif">
+                        At Sylva, we specialize in crafting innovative equity solutions that empower our clients to achieve sustainable financial growth.
+                        Through expertly curated portfolios and strategic market insights, we navigate complex markets with precision, helping investors maximize returns and build long-term wealth.
+                        Our forward-thinking approach ensures that today's investments create a secure and prosperous future, tailored to the unique goals of each client.
+                    </h2>
                 </div>
                 <div className='w-1/2 flex items-center justify-end'>
-                    <StockCharts />
+
                 </div>
             </div>
-            <pre>{data ? data['Meta Data']['1. Information'] : ''}</pre>
         </div>
     )
 }

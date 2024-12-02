@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import connectDB from './db';
 import cors from "cors";
 
+
+
 connectDB(); 
 
 dotenv.config();
@@ -16,6 +18,8 @@ app.use(cors());
 app.use(express.json()); 
 
 app.use('/api/v1', userRoutes);
+
+
 
 app.get('/', (req, res) => {
   res.send('Hello, Express!');

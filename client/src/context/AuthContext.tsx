@@ -45,9 +45,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           phone_number
         });
 
-        if (registerResponse.status === 201) {
+        console.log(registerResponse.data);
+
+        if (registerResponse.data.userCreated || registerResponse.data.existingUser.A == -1) {
           console.log('User registered successfully');
           navigate('/assessment');
+          return;
         }
 
         navigate('/');

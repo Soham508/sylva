@@ -48,12 +48,15 @@ const Navbar = () => {
                         <Link to='/' className="relative hover:shadow-slate-100/30 flex w-24 cursor-pointer items-center justify-center  text-black  font-semibold rounded-lg overflow-hidden hover-effect">
                             <span className="z-10">Home</span>
                         </Link>
-                        <Link to='/research' className="relative hover:shadow-slate-100/30 flex w-24 cursor-pointer items-center justify-center  text-black  font-semibold rounded-lg overflow-hidden hover-effect">
+
+                        <Link to='research' className="relative hover:shadow-slate-100/30 flex w-24 cursor-pointer items-center justify-center  text-black  font-semibold rounded-lg overflow-hidden hover-effect">
                             <span className="z-10">Research</span>
                         </Link>
+
                         <Link to='about' className="relative hover:shadow-slate-100/30 flex w-24 cursor-pointer items-center justify-center  text-black  font-semibold rounded-lg overflow-hidden hover-effect">
                             <span className="z-10">About us</span>
                         </Link>
+
                         {currentUser && <Link to='dashboard' className="relative hover:shadow-slate-100/30 flex w-24 cursor-pointer items-center justify-center  text-black  font-semibold rounded-lg overflow-hidden hover-effect">
                             <span className="z-10">Portfolio</span>
                         </Link>}

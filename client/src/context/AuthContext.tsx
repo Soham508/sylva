@@ -29,16 +29,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-
       const user = result.user;
+      const idToken = await user.getIdToken();
       const email = user.email;
       const username = user.displayName;
       const profile_picture_url = user.photoURL;
       const phone_number = user.phoneNumber;
+      console.log("ID Token:", idToken);
 
       try {
-
-        const registerResponse = await axios.post('http://localhost:3000/api/v1/register', {
+        const registerResponse = await axios.post('http://localhost:8000/api/users/', {
           username,
           email,
           profile_picture_url,
@@ -74,6 +74,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
     });

@@ -75,10 +75,19 @@ const Dashboard = () => {
 
     const getUserPortfolio = async () => {
         try {
-            const email = currentUser?.email;
-            const res = await axios.post('http://localhost:3000/api/v1/get-portfolio', { email });
+            const username = currentUser?.displayName;
+            const idToken = await currentUser?.getIdToken();
+            const res = await axios.get(
+                `http://localhost:8000/api/users/${username}/`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${idToken}`,
+                    },
+                }
+            );
             if (res.data.success) {
-                setPortfolioData(res.data.portfolioData);
+                const portfolio: Portfolio = { initial_portfolio: res.data.user.initial_portfolio, target_portfolio: res.data.user.target_portfolio, actions: res.data.user.actions }
+                setPortfolioData(portfolio);
                 setLoading(false);
                 return;
             }
@@ -91,6 +100,9 @@ const Dashboard = () => {
     useEffect(() => {
         if (currentUser && currentUser.email) {
             getUserPortfolio();
+            console.log(currentUser.getIdToken
+
+            )
         }
     }, [currentUser]);
 

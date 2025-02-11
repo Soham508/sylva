@@ -4,6 +4,9 @@ import { SlEnergy } from "react-icons/sl";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import { Footer } from "flowbite-react";
 import { Link } from "react-router-dom";
+import healthcareImage from "./../../public/healthcare.jpeg"
+import FMCGImage from "./../../public/FMCG.jpg"
+import EnergyImage from "./../../public/Energy.png"
 
 const Research = () => {
     return (
@@ -35,9 +38,9 @@ const Research = () => {
                         </div>
                         <div className="h-full w-1/2">
                             <img
-                                src="https://www.inverto.com/wp-content/uploads/2021/08/energy-header-mobile-new.png"  // Replace with the actual image URL
+                                src={EnergyImage}
                                 alt="Healthcare"
-                                className="h-full w-full object-cover " // Ensures the image covers the space and is responsive
+                                className="h-full w-full object-cover "
                             />
                         </div>
                     </div>
@@ -66,9 +69,9 @@ const Research = () => {
                         </div>
                         <div className="h-full w-1/2">
                             <img
-                                src="https://www.ust.com/en/insights/media_13375e2022146213b1e1df8818f8a54f6ac9e7b8c.jpeg?width=750&format=jpeg&optimize=medium"  // Replace with the actual image URL
+                                src={healthcareImage}
                                 alt="Healthcare"
-                                className="h-full w-full object-cover " // Ensures the image covers the space and is responsive
+                                className="h-full w-full object-cover "
                             />
                         </div>
                     </div>
@@ -94,9 +97,9 @@ const Research = () => {
                         </div>
                         <div className="h-full w-1/2">
                             <img
-                                src="https://www.creativehatti.com/wp-content/uploads/2024/02/Image-of-grocery-products-in-shopping-mall-Small.jpg"  // Replace with the actual image URL
+                                src={FMCGImage}
                                 alt="Healthcare"
-                                className="h-full w-full " // Ensures the image covers the space and is responsive
+                                className="h-full w-full "
                             />
                         </div>
                     </div>

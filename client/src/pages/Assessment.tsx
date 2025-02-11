@@ -51,8 +51,7 @@ const Assessment = () => {
         };
 
         try {
-
-            const response = await axios.post('http://127.0.0.1:8000/risk_aversion', body);
+            const response = await axios.post('http://localhost:8000/api/risk_aversion/', body);
             console.log('Response:', response.data);
             return response.data.risk_tolerance_score
 
@@ -72,24 +71,21 @@ const Assessment = () => {
 
         const body = {
             a: risk_tolerance_score, // Use the score from the first API response
-            Stocks: tickers,         // Tickers extracted from riskState
+            stocks: tickers,         // Tickers extracted from riskState
             wealth: wealth           // Wealth from riskState
         };
 
         console.log('Sending request to /generate_portfolio API with body:', body);
 
         try {
-            // Make the POST request to the second API
-            const response = await axios.post('http://127.0.0.1:8000/generate_portfolio', body);
+            const response = await axios.post('http://127.0.0.1:8000/api/generate_portfolio/', body);
             const initial_portfolio = response.data.initial_portfolio;
             const target_portfolio = response.data.target_portfolio;
             const actions = response.data.actions;
 
-            // Log the response from the /process endpoint
             console.log('Response from /process API:', response.data);
-            const email = currentUser?.email
+            const username = currentUser?.displayName
             const requestBody = {
-                email,
                 initial_portfolio,
                 target_portfolio,
                 actions,
@@ -97,8 +93,11 @@ const Assessment = () => {
             };
 
             try {
-                const response = await axios.post('http://localhost:3000/api/v1/update-portfolio', requestBody);
+                const response = await axios.patch(`http://localhost:8000/api/users/${username}/`, requestBody);
                 console.log('Portfolio updated:', response.data);
+                if (response.data.success) {
+                    navigate('/')
+                }
             } catch (error) {
                 console.log('Error updating portfolio:', error);
             }

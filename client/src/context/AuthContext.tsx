@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log("ID Token:", idToken);
 
       try {
-        const registerResponse = await axios.post('http://localhost:8000/api/users/', {
+        const registerResponse = await axios.post('https://sylva-django.onrender.com/api/users/', {
           username,
           email,
           profile_picture_url,
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         console.log(registerResponse.data);
 
-        if (registerResponse.data.userCreated || registerResponse.data.existingUser.A == -1) {
+        if (registerResponse.data.userCreated) {
           console.log('User registered successfully');
           navigate('/assessment');
           return;

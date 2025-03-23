@@ -24,7 +24,7 @@ const User = () => {
             <Dropdown
                 arrowIcon={false}
                 inline
-                className="bg-black border p-2  border-slate-900 rounded-lg"
+                className="bg-black border p-2 gap-y-3  border-slate-900 rounded-lg"
                 label={<Avatar alt="User" img={photoURL ? photoURL : 'https://i.pinimg.com/474x/76/4d/59/764d59d32f61f0f91dec8c442ab052c5.jpg'} rounded />
                 }
             >
@@ -32,8 +32,6 @@ const User = () => {
                     <span className="block text-sm">{currentUser?.displayName}</span>
                     <span className="block truncate text-sm font-medium">{currentUser?.email}</span>
                 </Dropdown.Header>
-                <Link to='details'><Dropdown.Item className="text-white m-1 hover:text-black rounded-lg ">Personal details</Dropdown.Item></Link>
-                <Link to='portfolio'><Dropdown.Item className="text-white m-1 hover:text-black rounded-lg ">Portfolio</Dropdown.Item></Link>
                 <Link to='risk-profile'><Dropdown.Item className="text-white m-1 hover:text-black rounded-lg ">Risk profile</Dropdown.Item></Link>
                 <Link to='settings'><Dropdown.Item className="text-white m-1 hover:text-black rounded-lg ">Settings</Dropdown.Item></Link>
                 <Dropdown.Divider />

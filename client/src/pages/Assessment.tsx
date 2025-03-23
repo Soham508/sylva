@@ -45,13 +45,12 @@ const Assessment = () => {
 
     const generate_A = async (riskState: RiskState) => {
         console.log("making req for a...")
-        // Prepare the body for the POST request
         const body = {
             questions: [...riskState.questions]
         };
 
         try {
-            const response = await axios.post('http://localhost:8000/api/risk_aversion/', body);
+            const response = await axios.post('https://sylva-django.onrender.com/api/risk_aversion/', body);
             console.log('Response:', response.data);
             return response.data.risk_tolerance_score
 
@@ -70,15 +69,15 @@ const Assessment = () => {
         console.log(`A generated to be ${risk_tolerance_score}`);
 
         const body = {
-            a: risk_tolerance_score, // Use the score from the first API response
-            stocks: tickers,         // Tickers extracted from riskState
-            wealth: wealth           // Wealth from riskState
+            a: risk_tolerance_score,
+            stocks: tickers,
+            wealth: wealth
         };
 
         console.log('Sending request to /generate_portfolio API with body:', body);
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/generate_portfolio/', body);
+            const response = await axios.post('https://sylva-django.onrender.com/api/generate_portfolio/', body);
             const initial_portfolio = response.data.initial_portfolio;
             const target_portfolio = response.data.target_portfolio;
             const actions = response.data.actions;
@@ -93,7 +92,7 @@ const Assessment = () => {
             };
 
             try {
-                const response = await axios.patch(`http://localhost:8000/api/users/${username}/`, requestBody);
+                const response = await axios.patch(`https://sylva-django.onrender.com/api/users/${username}/`, requestBody);
                 console.log('Portfolio updated:', response.data);
                 if (response.data.success) {
                     navigate('/')
@@ -406,8 +405,14 @@ const Assessment = () => {
                         <div
                             onClick={async () => {
                                 console.log(riskState);
-                                const res = await generate_portfolio(riskState);
-                                console.log(res);
+                                try {
+                                    const res = await generate_portfolio(riskState);
+                                    console.log(res);
+                                    navigate('/dashboard');
+                                }
+                                catch (err) {
+                                    console.log(err);
+                                }
                             }}
                             className="relative flex flex-row bg-black p-3 gap-x-2 items-center text-white rounded-lg shadow-md hover:bg-black/90 active:bg-black/80 shadow-black cursor-pointer">
                             <span className="z-10 top-3" >Submit</span>

@@ -12,7 +12,7 @@ import { MdError } from "react-icons/md";
 import Pie_Chart from "@/components/Pie_Chart";
 import { useNavigate } from "react-router-dom";
 
-interface Portfolio {
+export interface Portfolio {
     initial_portfolio: StockPortfolio;
     target_portfolio: StockPortfolio;
     actions: Record<string, { action: string; quantity: number }>;
@@ -34,11 +34,33 @@ export type StockEntry = {
     price_per_share?: number; // Optional since "Risk_Free" may not have it
 };
 
-const emptyPortfolio: Portfolio = {
-    initial_portfolio: {},
-    target_portfolio: {},
-    actions: {}
+export interface PieChartData {
+    [key: string]: {
+        "%_of_portfolio": number;
+        investment_amount?: number;
+        quantity?: number;
+        price_per_share?: number;
+    }
 }
+const emptyPortfolio: Portfolio = {
+    initial_portfolio: {
+        "SUNPHARMA.NS": {
+            "%_of_portfolio": 8.140349464032543,
+            "investment_amount": 814034.9464032543,
+            "quantity": 451.338965082209,
+            "price_per_share": 1803.5999755859373
+        }
+    },
+    target_portfolio: {
+        "SUNPHARMA.NS": {
+            "%_of_portfolio": 8.140349464032543,
+            "investment_amount": 814034.9464032543,
+            "quantity": 451.338965082209,
+            "price_per_share": 1803.5999755859373
+        }
+    },
+    actions: {}
+};
 
 function calculateTotalChangeValue(portfolioData: Portfolio): number {
     const actions = portfolioData.actions;
@@ -46,22 +68,18 @@ function calculateTotalChangeValue(portfolioData: Portfolio): number {
 
     let totalValue = 0;
 
-    // Iterate over the actions to compute the total value for each stock
     for (const stockSymbol in actions) {
-        // Use Object.prototype.hasOwnProperty.call() to check for property existence
         if (Object.prototype.hasOwnProperty.call(actions, stockSymbol)) {
             const stockAction = actions[stockSymbol];
             const stockDetails = initialPortfolio[stockSymbol];
 
-            // Check if stock exists in initial portfolio and action has quantity
             if (stockDetails && stockAction.quantity) {
                 const price = stockDetails.price_per_share;
                 const quantityChange = stockAction.quantity;
 
-                // Calculate the value based on the given formula
-                const calculatedValue = price * quantityChange * 0.003;
+                const calculatedValue = price ? price * quantityChange * 0.003 : 0;
 
-                // Add the result to the total sum
+
                 totalValue += calculatedValue;
             }
         }
@@ -77,21 +95,15 @@ const Dashboard = () => {
     const [rebalance, setRebalance] = useState(false);
     const [portfolioData, setPortfolioData] = useState<Portfolio | undefined>(undefined);
     const { currentUser } = useAuth();
-    const totalValue = 0
     const navigate = useNavigate();
 
     const getUserPortfolio = async () => {
         try {
-            const username = currentUser?.displayName;
-            const idToken = await currentUser?.getIdToken();
+            const email = currentUser?.email || '';
             const res = await axios.get(
-                `https://sylva-django.onrender.com/api/users/${username}/`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${idToken}`,
-                    },
-                }
+                `https://sylva-django.onrender.com/api/users/?email=${email}`
             );
+            console.log(res.data)
             if (res.data.success) {
                 if (res.data.user.A == -1) {
                     setError({
@@ -99,9 +111,11 @@ const Dashboard = () => {
                         error: true,
                     });
                 }
+                setError({ message: "", error: false })
                 const portfolio: Portfolio = { initial_portfolio: res.data.user.initial_portfolio, target_portfolio: res.data.user.target_portfolio, actions: res.data.user.actions }
                 setPortfolioData(portfolio);
                 setLoading(false);
+                console.log(error)
                 return;
             }
         } catch (err) {
@@ -112,12 +126,6 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (currentUser && currentUser.email) {
-            const fetchToken = async () => {
-                const tokenId = await currentUser.getIdToken();
-                console.log("ID Token:", tokenId);
-            };
-
-            fetchToken();
 
             getUserPortfolio();
         }
@@ -126,7 +134,7 @@ const Dashboard = () => {
     return (
         <div className="flex flex-col items-center gap-y-10">
             <div
-                className={`flex flex-col gap-4 w-full text-red-700 font-semibold items-center text-3xl justify-center mt-32 ${error ? "" : "hidden"
+                className={`flex flex-col gap-4 w-full text-red-700 font-semibold items-center text-3xl justify-center mt-32 ${error.error ? "" : "hidden"
                     }`}
             >
                 <div className="flex flex-row items-center">
@@ -136,13 +144,19 @@ const Dashboard = () => {
                 <div className="">
                     <button
                         className={`relative bottom-0 h-12 text-lg flex flex-row bg-black p-3 items-center text-white rounded-lg shadow-md hover:bg-black/90 active:bg-black/80 shadow-black cursor-pointer`}
-                        onClick={() => { navigate("/assessment") }}
-                    > Generate portfolio </button>
+                        onClick={() => {
+                            navigate("/assessment");
+                        }}
+                    >
+                        {" "}
+                        Generate portfolio{" "}
+                    </button>
                 </div>
             </div>
 
+
             <div
-                className={`w-full flex gap-y-32 flex-row gap-4 ${error ? "hidden" : ""
+                className={`w-full flex gap-y-32 flex-row gap-4 ${error.error ? "hidden" : ""
                     }`}
             >
                 {loading ? (
@@ -166,12 +180,8 @@ const Dashboard = () => {
                         </div>
 
                         <div className="w-1/2 flex flex-col items-end justify-center">
-                            <Pie_Chart
-                                StockPortfolio={
-                                    portfolioData?.initial_portfolio ||
-                                    emptyPortfolio.initial_portfolio
-                                }
-                            />
+                            <Pie_Chart />
+
                         </div>
                     </div>
                 )}
@@ -189,7 +199,7 @@ const Dashboard = () => {
                 </div>
             ) : (
                 <div
-                    className={`relative bottom-0 flex flex-row bg-black p-3 gap-x-2 ${loading || error ? "hidden" : ""
+                    className={`relative bottom-0 flex flex-row bg-black p-3 gap-x-2 ${loading || error.error ? "hidden" : ""
                         } items-center text-white rounded-lg shadow-md hover:bg-black/90 active:bg-black/80 shadow-black cursor-pointer`}
                     onClick={() => {
                         setRebalance(true);

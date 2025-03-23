@@ -83,16 +83,18 @@ const Assessment = () => {
             const actions = response.data.actions;
 
             console.log('Response from /process API:', response.data);
-            const username = currentUser?.displayName
+            const email = currentUser?.email
             const requestBody = {
                 initial_portfolio,
                 target_portfolio,
                 actions,
-                riskState
+                riskState,
+                email,
+                A: risk_tolerance_score
             };
 
             try {
-                const response = await axios.patch(`https://sylva-django.onrender.com/api/users/${username}/`, requestBody);
+                const response = await axios.patch(`https://sylva-django.onrender.com/api/users/`, requestBody);
                 console.log('Portfolio updated:', response.data);
                 if (response.data.success) {
                     navigate('/')
@@ -114,7 +116,7 @@ const Assessment = () => {
         { value: "''", score: -1 },
         { value: "''", score: -1 },
         { value: "''", score: -1 },
-        { value: "''", score: 3 },
+        { value: "''", score: 30 },
         { value: "''", score: -1 },
         { value: "''", score: -1 },
         { value: "''", score: -1 },
